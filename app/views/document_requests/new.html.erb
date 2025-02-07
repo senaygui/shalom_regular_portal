@@ -1,0 +1,93 @@
+<h1>New Document Request</h1>
+
+<%= form_with(model: @document_request, local: true) do |form| %>
+  <% if @document_request.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@document_request.errors.count, "error") %> prohibited this document request from being saved:</h2>
+
+      <ul>
+        <% @document_request.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Hidden field to carry the document_type -->
+  <%= form.hidden_field :document_type %>
+
+  <div class="field">
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :middle_name %>
+    <%= form.text_field :middle_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :mobile_number %>
+    <%= form.text_field :mobile_number %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.email_field :email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :admission_type %>
+    <%= form.select :admission_type, ['Regular', 'Extension'] %>
+  </div>
+
+  <div class="field">
+    <%= form.label :study_level %>
+    <%= form.select :study_level, ['undergraduate', 'graduate'] %>
+  </div>
+
+  <div class="field">
+    <%= form.label :program %>
+    <%= form.select :program, ['Environmental Science and Sustainable Development', 'Food Science and Technology', 'Business Management and Entrepreneurship', 'Marketing Management Regular', 'Computer Science Regular', 'Information Systems Regular', 'Information Technology Regular', 'Management Regular', 'Architecture Regular', 'Accounting & Finance Regular'] %>
+  </div>
+
+  <div class="field">
+    <%= form.label :department %>
+    <%= form.select :department, ['Environmental Science and Sustainable Development', 'Food Science and Technology', 'Information Systems', 'Accounting & Finance', 'Management', 'Master of Arts in Organizational Leadership Program', 'Information Technology', 'Marketing Management', 'Business Management and Entrepreneurship', 'Architecture', 'Division of Common Courses', 'Masters of Business Administration', 'Computer Science'] %>
+  </div>
+
+  <div class="field">
+    <%= form.label :student_status %>
+    <%= form.select :student_status, ['Active', 'Inactive', 'Graduated'], {}, { onchange: "showGraduationYear(this)" } %>
+  </div>
+
+  <div class="field" id="graduation_year_field" style="display: none;">
+    <%= form.label :year_of_graduation %>
+    <%= form.date_select :year_of_graduation, start_year: 1900, end_year: Time.now.year %>
+  </div>
+
+  <div class="field">
+    <%= form.label :document %>
+    <%= form.file_field :document %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+<script>
+  function showGraduationYear(select) {
+    var field = document.getElementById('graduation_year_field');
+    if (select.value === 'Graduated') {
+      field.style.display = 'block';
+    } else {
+      field.style.display = 'none';
+    }
+  }
+</script>

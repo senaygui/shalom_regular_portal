@@ -1,0 +1,185 @@
+<%provide(:title, "Payment History")%>
+<section class="content-header">
+<%if notice%>
+  <p class="alert alert-success"><%=notice%></p>
+<%end%>
+<% if alert%>
+  <p class="alert alert-danger"><%=alert%></p>
+<%end%>
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Available Courses for Add</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item active">Add Courses</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+</section>
+<div class="col-12 col-md-12">
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title">Course List</h3>
+    </div>
+    <div class="card-body">
+       <table id='ordersTable' class='table table-striped table-sm'>
+        <thead>
+          <tr>
+            <th>Course Title</th>
+            <th>Course Code</th>
+
+            <th>Year</th>
+            <th>Semester</th>
+            <th>Ects</th>
+            <th>Credit Hour</th>
+            <th>Status</th>
+
+          </tr>
+        </thead>
+         <tbody>
+     <%@course_having_f.each do |sg|%>
+             <%unless AddCourse.exists?(student: current_student, course_id: sg.course_id)%>
+
+             <tr>
+              <td><%= sg.course.course_title %></td>
+              <td><%= sg.course.course_code %></td>
+              <td><%= sg.course.semester %></td>
+              <td><%= sg.course.year %> </td>
+              <td><%= sg.course.ects %> </td>
+              <td><%= sg.course.credit_hour %> </td>  
+              <%if AddCourse.exists?(student: current_student, course_id: sg.course_id, status: 0)%>
+               <td class="actions">
+                  <span class="alert alert-warning p-0 text-sm">Your application is pending </span>
+                </td>
+              <%elsif sg.course.credit_hour > @allowed_credit_hour%>            
+                <td class="actions">
+                <span class="alert alert-danger p-0 text-sm"> You can't apply for this, because your maximum credit limit is <%=@allowed_credit_hour%> </span>
+                </td>
+                <%else%>
+                <td class="actions">
+                <%= link_to "Search Deaprtment", available_courses_path(sg.course.id), class: 'btn-sm btn-primary'%>
+                </td>
+              <%end%>
+            </tr>
+              <%end%>
+          <%end%>
+
+          <%@next_courses.each do |sg|%>
+             <%unless AddCourse.exists?(student: current_student, course_id: sg.id)%>
+
+             <tr>
+              <td><%= sg.course_title %></td>
+              <td><%= sg.course_code %></td>
+              <td><%= sg.semester %></td>
+              <td><%= sg.year %> </td>
+              <td><%= sg.ects %> </td>
+              <td><%= sg.credit_hour %> </td>  
+              <%if AddCourse.exists?(student: current_student, course_id: sg.id, status: 0)%>
+               <td class="actions">
+                  <span class="alert alert-warning p-0 text-sm">Your application is pending </span>
+                </td>
+              <%elsif sg.credit_hour > @allowed_credit_hour%>            
+                <td class="actions">
+                <span class="alert alert-danger p-0 text-sm"> You can't apply for this, because your maximum credit limit is <%=@allowed_credit_hour%> </span>
+                </td>
+                <%else%>
+                <td class="actions">
+                <%= link_to "Search Deaprtment", available_courses_path(sg.id), class: 'btn-sm btn-primary'%>
+                </td>
+              <%end%>
+            </tr>
+              <%end%>
+          <%end%>
+
+
+
+
+          <%@courses.each do |drop|%>
+            <tr>
+              <td><%= drop.course.course_title %></td>
+              <td><%= drop.course.course_code %></td>
+              <td><%= drop.semester %></td>
+              <td><%= drop.year %> </td>
+              <td><%= drop.course.ects %> </td>
+              <td><%= drop.course.credit_hour %> </td>  
+              <%if drop.drop_course_applied?%>
+               <td class="actions">
+                  <span class="alert alert-warning p-0 text-sm">Your application is pending </span>
+                </td>
+              <%elsif drop.course.credit_hour > @allowed_credit_hour%>            
+                <td class="actions">
+                <span class="alert alert-danger p-0 text-sm"> You can't apply for this, because your maximum credit limit is <%=@allowed_credit_hour%> </span>
+                </td>
+                <%else%>
+                <td class="actions">
+                <%= link_to "Search Deaprtment", available_courses_path(drop.course.id, drop.id), class: 'btn-sm btn-primary'%>
+                </td>
+              <%end%>
+            </tr>
+          <%end%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="col-12 col-md-12">
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title">Approved Course List</h3>
+    </div>
+    <div class="card-body">
+       <table id='ordersTable' class='table table-striped table-sm'>
+        <thead>
+          <tr>
+            <th>Course Title</th>
+            <th>Course Code</th>
+            <th>Year</th>
+            <th>Semester</th>
+            <th>Ects</th>
+            <th>Credit Hour</th>
+            <th>Deaprtment</th>
+            <th>Status</th>
+
+          </tr>
+        </thead>
+         <tbody>
+          <%@added_courses.each do |course|%>
+            <tr>
+              <td><%= course.course.course_title %></td>
+              <td><%= course.course.course_code %></td>
+              <td><%= course.semester %></td>
+              <td><%= course.year %> </td>
+              <td><%= course.course.ects %> </td>
+              <td><%= course.course.credit_hour %> </td>  
+              <td><%= course.department.department_name %> </td>  
+        
+
+            </tr>
+          <%end%>
+       
+        </tbody>
+      </table>
+      <% if @added_courses.any?%>
+         <div>
+            <% if current_student.get_added_course.sum{|add| add.credit_hour} <= @allowed_credit_hour%>
+              <p> 
+                <%= link_to "Register Course", add_enrollement_path, class: 'btn-sm btn-primary'%>
+               </p>  
+              <%else%>
+              <p> 
+               <span class="alert alert-danger p-0 text-sm"> You can't register, because you have reached maximum credit hour limit. Please contact your department head. </span>
+              </p>  
+              <%end%>
+          </div>
+          <%end%>
+    </div>
+  </div>
+</div>
+
+ 

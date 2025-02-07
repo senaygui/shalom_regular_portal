@@ -1,0 +1,46 @@
+<div class="col-lg-3 col-md-6">
+  <%= link_to '#', 'data-no-turbolink' => false do %>
+    <div class="icon-box">
+      <h4>Alumni Services</h4>
+    </div>
+  <% end %>
+</div>
+
+<!-- Options for document types -->
+<div class="row">
+  <div class="col-lg-3 col-md-6">
+    <%= link_to new_document_request_path(document_type: 'Official Transcript'), 'data-no-turbolink' => false do %>
+      <div class="icon-box">
+        <h4>Official Transcript</h4>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <%= link_to new_document_request_path(document_type: 'Original Degree'), 'data-no-turbolink' => false do %>
+      <div class="icon-box">
+        <h4>Original Degree</h4>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <%= link_to new_document_request_path(document_type: 'Temporary Certificate'), 'data-no-turbolink' => false do %>
+      <div class="icon-box">
+        <h4>Temporary Certificate</h4>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <%= link_to new_document_request_path(document_type: 'Student Copy'), 'data-no-turbolink' => false do %>
+      <div class="icon-box">
+        <h4>Student Copy</h4>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <%= link_to new_document_request_path(document_type: 'To Whom It May Concern'), 'data-no-turbolink' => false do %>
+      <div class="icon-box">
+        <h4>To Whom It May Concern</h4>
+      </div>
+    <% end %>
+  </div>
+</div>

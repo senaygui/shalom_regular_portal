@@ -1,0 +1,16 @@
+<h1>External Transfers</h1>
+<table class="responsive nowrap table table-hover" id="dttb-external_transfers" data-sort="true" data-source="<%= url_for(format: :json)%>">
+  <thead>
+    <tr>
+      <th data-data="first_name">First name</th>
+      <th data-data="last_name">Last name</th>
+      <th data-data="department">Department</th>
+      <th data-data="previous_institution">Previous institution</th>
+      <th data-data="previous_student_id">Previous student</th>
+      <th data-data="status">Status</th>
+      <th data-data="url" data-orderable="false" data-class-name="all" data-searchable="false" class="skip-export" width="100px"></th>
+    </tr>
+  </thead>
+</table>
+<br>
+<%= link_to 'New External Transfer', new_external_transfer_path %>

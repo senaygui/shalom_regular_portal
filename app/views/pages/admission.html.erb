@@ -1,0 +1,192 @@
+<% provide(:title, "Home") %>
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
+<style type="text/css">
+  body {
+    background: #f0f0f0;
+    font-family: 'Raleway', Arial, sans-serif;
+  }
+
+  .banner {
+    width: 350px;
+    height: 200px;
+  }
+
+  h1 {
+    font-size: 2em;
+    font-weight: bold;
+    letter-spacing: .5px;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+  }
+
+  .card-header {
+    background-color: #036696;
+    color: #ffffff;
+    border-radius: 10px 10px 0 0;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .card-header .card-title {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .card-body {
+    padding: 2rem;
+  }
+
+  .icon-box {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #252525;
+    transition: 0.3s;
+    text-align: center;
+    color: #ffffff;
+  }
+
+  .icon-box:hover {
+    background: #2b2b2b;
+  }
+
+  .icon-box h4 {
+    font-weight: 700;
+    font-size: 18px;
+    color: #ffffff;
+    margin-top: 10px;
+    transition: color 0.3s;
+  }
+
+  .icon-box:hover h4 {
+    color: #036696;
+  }
+
+  .icon-box p {
+    margin-top: 10px;
+    line-height: 24px;
+    font-size: 14px;
+  }
+</style>
+
+<div class="content mt-3">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-12">
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">
+              <i class="fas fa-info-circle mr-2"></i>
+              <strong>Instruction</strong>
+            </h3>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <h2>In What Study Level And Modality Do You Want To Enroll?</h2>
+            <div class="row justify-content-center">
+              <div class="col-lg-3 col-md-6">
+                <%= link_to new_external_transfer_path, 'data-no-turbolink' => false do %>
+                  <div class="icon-box">
+                    <h4>Apply for Transfer</h4>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <%= link_to new_student_registration_path(modality: "regular", study_level: "undergraduate"), 'data-no-turbolink' => false do %>
+                  <div class="icon-box">
+                    <h4>Regular Degree</h4>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <%= link_to new_student_registration_path(modality: "regular", study_level: "graduate"), 'data-no-turbolink' => false do %>
+                  <div class="icon-box">
+                    <h4>Regular Masters</h4>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <%= link_to new_student_registration_path(modality: "extention", study_level: "undergraduate"), 'data-no-turbolink' => false do %>
+                  <div class="icon-box">
+                    <h4>Extension Degree</h4>
+                  </div>
+                <% end %>
+              </div>
+            
+              <div class="col-lg-3 col-md-6">
+  <div class="icon-box" style="padding: 20px; border-radius: 10px; background: #252525; text-align: center; color: #ffffff;">
+    <h4>
+      <a data-toggle="collapse" href="#alumniServicesCollapse" role="button" aria-expanded="false" aria-controls="alumniServicesCollapse" style="color: #ffffff; text-decoration: none;">
+        Alumni Services
+      </a>
+    </h4>
+    <div class="collapse" id="alumniServicesCollapse">
+      <div class="row">
+        <div class="col-12">
+        <%= link_to new_document_request_path(document_type: 'Official Transcript'), 'data-no-turbolink' => false do %>
+          <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
+            <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Official Transcript</h5>
+          </div>
+        <% end %>
+        </div>
+        <div class="col-12">
+          <%= link_to new_document_request_path(document_type: 'Original Degree'), 'data-no-turbolink' => false do %>
+            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
+              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Original Degree</h5>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-12">
+          <%= link_to new_document_request_path(document_type: 'Temporary Certificate'), 'data-no-turbolink' => false do %>
+            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
+              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Temporary Certificate</h5>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-12">
+          <%= link_to new_document_request_path(document_type: 'Student Copy'), 'data-no-turbolink' => false do %>
+            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
+              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Student Copy</h5>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-12">
+          <%= link_to new_document_request_path(document_type: 'To Whom It May Concern'), 'data-no-turbolink' => false do %>
+            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
+              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">To Whom It May Concern</h5>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-12">
+          <%= link_to track_form_document_requests_path(document_type: 'Track Request'), 'data-no-turbolink' => false do %>
+            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
+              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Track Your Request</h5>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+            
+            </div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

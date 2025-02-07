@@ -1,0 +1,9 @@
+<h2>Assessments</h2>
+
+<ul>
+  <% @assessment_plan.assessments.each do |assessment| %>
+    <li>
+      <%= link_to assessment.name, assessment_path(assessment) %>
+    </li>
+  <% end %>
+</ul>

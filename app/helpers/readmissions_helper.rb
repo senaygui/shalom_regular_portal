@@ -1,0 +1,2 @@
+module ReadmissionsHelper
+end

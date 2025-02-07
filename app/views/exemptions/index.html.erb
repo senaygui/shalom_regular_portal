@@ -1,0 +1,29 @@
+<div class="container p-5 my-5">
+ 
+  <%= link_to "Back to home page", admin_externaltransfer_path, class: 'btn btn-danger'%>
+  <h2 class="text-center text-xl text-sm-md text-bold py-4 text-primary">Added Course for Exemption</h2>
+    <% if notice%>
+    <span class="alert alert-success"> <%=notice%></span>
+  <%end%>
+  <table class="responsive nowrap table table-hover"  data-sort="true" data-source="<%= url_for(format: :json)%>">
+    <thead>
+      <tr>
+        <th data-data="course_title">Course Title</th>
+        <th data-data="letter_grade">Letter Grade</th>
+        <th data-data="course_code">Course Code</th>
+        <th data-data="credit_hour">Credit Hour</th>
+        <th data-data="dean_approval">Dean Approval</th>
+        <th data-data="registeral_approval">Registeral Approval</th>
+        <th data-action="registeral_approval">Action</th>
+        <th data-action="delete">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @exemption.each do |exemption|%>
+        <%= render "exemption", exemption: exemption%>
+      <%end%>
+    </tbody>
+  </table>
+  <br>
+  <%= link_to 'New Exemption', new_exemptions_path(@applicant, @approved_by), class: 'btn btn-primary' %>
+</div>

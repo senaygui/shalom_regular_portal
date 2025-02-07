@@ -1,0 +1,7 @@
+<p style="color: green"><%= notice %></p>
+<%= render @exemption %>
+<div>
+  <%= link_to "Edit this exemption", edit_exemption_path(@exemption) %> |
+  <%= link_to "Back to exemptions", exemptions_path %>
+  <%= button_to "Destroy this exemption", @exemption, method: :delete %>
+</div>

@@ -1,0 +1,69 @@
+<h1>Document Request Status</h1>
+
+<p>
+  <strong>First name:</strong>
+  <%= @document_request.first_name %>
+</p>
+
+<p>
+  <strong>Middle name:</strong>
+  <%= @document_request.middle_name %>
+</p>
+
+<p>
+  <strong>Last name:</strong>
+  <%= @document_request.last_name %>
+</p>
+
+<p>
+  <strong>Mobile number:</strong>
+  <%= @document_request.mobile_number %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @document_request.email %>
+</p>
+
+<p>
+  <strong>Admission type:</strong>
+  <%= @document_request.admission_type %>
+</p>
+
+<p>
+  <strong>Study level:</strong>
+  <%= @document_request.study_level %>
+</p>
+
+<p>
+  <strong>Program:</strong>
+  <%= @document_request.program %>
+</p>
+
+<p>
+  <strong>Department:</strong>
+  <%= @document_request.department %>
+</p>
+
+<p>
+  <strong>Student status:</strong>
+  <%= @document_request.student_status %>
+</p>
+
+<% if @document_request.student_status == 'Graduated' %>
+  <p>
+    <strong>Year of graduation:</strong>
+    <%= @document_request.year_of_graduation %>
+  </p>
+<% end %>
+
+
+<p>
+  <strong>Track number:</strong>
+  <%= @document_request.track_number %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @document_request.status %>
+</p>

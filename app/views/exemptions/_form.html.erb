@@ -1,0 +1,24 @@
+<%= simple_form_for(@exemption, url: create_exemptions_path(@applicant)) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+  <div class="form-inputs">
+    <%= f.input :course_title, required: true, label: 'Course Title' %>
+    <%= f.input :letter_grade, required: true, label: 'Letter Grade' %>
+    <%= f.input :course_code, required: true, label: 'Course Code' %>
+    <%= f.input :credit_hour, required: true, label: 'Credit Hour' %>
+    <% if params[:action] == "edit"%>
+      <%= f.input :department_approval, collection: ["Pending", "Rejected",  @approved_by], input_html: {selected: @approved_by}%>
+    <%else%>
+      <%= f.input :department_approval, as: :hidden, input_html: {value: @approved_by}%>
+    <%end%>
+    <%# <%= f.input :department_approval %>
+    <%# <%= f.input :dean_approval %>
+    <%# <%= f.input :registeral_approval  %>
+    <%# <%= f.input :exemption_needed  %>
+    <%# <%= f.association :external_transfer  %>
+  </div>
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+    <%= link_to "Back to Exemptions", index_exemptions_path(@applicant), class: 'btn btn-primary' %>
+  </div>
+<% end %>

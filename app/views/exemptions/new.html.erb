@@ -1,0 +1,9 @@
+<div class="container border border-primary p-4 my-5 mx-auto">
+<%= link_to "Back to home page", admin_externaltransfer_path, class: 'btn btn-danger'%>
+
+  <% unless notice.blank?%>
+    <p class="text-lg text-bold text-success text-center"><%= notice %></p>
+  <%end%>
+  <h2 class="text-center text-xl text-sm-md text-bold py-2 text-primary">Add Course for Exemption</h2>
+  <%= render "form", exemption: @exemption %>
+</div>

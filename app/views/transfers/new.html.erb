@@ -1,0 +1,34 @@
+<%= form_with(model: @transfer, local: true) do |form| %>
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h4>Submit Transfer Request</h4>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <%= form.label :new_program_id, "Select New Program" %>
+                <%= form.collection_select :new_program_id, @available_programs, :id, :program_name, { prompt: "Choose a Program" }, { class: 'form-control' } %>
+              </div>
+          
+              <div class="form-group">
+                <%= form.label :new_department_id, "Select New Department" %>
+                <%= form.collection_select :new_department_id, @available_departments, :id, :department_name, { prompt: "Choose a Department" }, { class: 'form-control' } %>
+              </div>
+          
+              <div class="form-group">
+                <%= form.label :reason %>
+                <%= form.text_area :reason, rows: 5, class: 'form-control', required: true %>
+              </div>
+          
+              <div class="form-group text-center">
+                <%= form.submit "Submit Transfer Request", class: 'btn btn-primary' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  

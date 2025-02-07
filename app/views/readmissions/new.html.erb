@@ -1,0 +1,44 @@
+<section class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header text-center">
+          <h2>Request Readmission</h2>
+        </div>
+        <div class="card-body">
+          <%= form_with model: @readmission, local: true do |f| %>
+            <div class="form-group">
+              <%= f.label :last_earned_cgpa, class: "form-label" %>
+              <%= f.number_field :last_earned_cgpa, step: 0.01, class: "form-control" %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :readmission_semester, class: "form-label" %>
+              <%= f.number_field :readmission_semester, class: "form-control" %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :readmission_year, class: "form-label" %>
+              <%= f.number_field :readmission_year, class: "form-control" %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :reason_for_withdrawal, class: "form-label" %>
+              <%= f.text_area :reason_for_withdrawal, class: "form-control", rows: 4 %>
+            </div>
+
+            <!-- Hidden Fields with Current Values -->
+            <%= f.hidden_field :program_id, value: current_student.program_id %>
+            <%= f.hidden_field :department_id, value: current_student.department_id %>
+            <%= f.hidden_field :section_id, value: current_student.section_id %>
+            <%= f.hidden_field :academic_calendar_id, value: current_student.academic_calendar_id %>
+
+            <div class="form-group text-center">
+              <%= f.submit 'Submit Request', class: "btn btn-primary px-4" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

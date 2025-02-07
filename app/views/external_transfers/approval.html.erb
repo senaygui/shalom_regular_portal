@@ -1,0 +1,10 @@
+<div class="container border border-primary p-5 my-5 mx-auto">
+  <h3 class="text-xl text-bold text-center">New application transfer approval form</h3>
+  <p class="text-center text-lg text-bold">Applicant current status  <span class="badge badge-info text-upercase"><%=@external_transfer&.status%></span></p>
+  <%= simple_form_for(@external_transfer, url: transfer_approved_path(@external_transfer), method: :patch) do |f| %>
+    <%=f.input :message%>
+    <%=f.input :status, collection: %w[pending accepted rejected]%>
+    <%=f.input :approved_by, as: :hidden, input_html: {value: @approved_by}%>
+    <%= f.submit "Update Status", class: 'btn btn-primary'%>
+  <%end%>
+</div>

@@ -1,0 +1,37 @@
+<script>
+  function fetchCoursesAndSections() {
+    var programId = document.getElementById('program_select').value;
+    var year = document.getElementById('class_schedule_year').value;
+    var semester = document.getElementById('class_schedule_semester').value;
+
+    if (programId && year && semester) {
+      fetch(`/admin/class_schedules/fetch_courses_and_sections?program_id=${programId}&year=${year}&semester=${semester}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          var courseSelect = document.getElementById('course_select');
+          var sectionSelect = document.getElementById('section_select');
+
+          courseSelect.innerHTML = '';
+          sectionSelect.innerHTML = '';
+
+          data.courses.forEach(function(course) {
+            var option = new Option(course.course_title, course.id);
+            courseSelect.add(option);
+          });
+
+          data.sections.forEach(function(section) {
+            var option = new Option(section.section_short_name, section.id);
+            sectionSelect.add(option);
+          });
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+  }
+</script>

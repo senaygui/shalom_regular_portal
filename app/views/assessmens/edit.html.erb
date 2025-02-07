@@ -1,0 +1,49 @@
+<div class="w-50 mx-auto my-5 border border-primary p-5 gap-5" style="gap: 20px">
+  <a href="/admin/assessments" class="btn btn-outline-primary">Back to home</a>
+  <h1 class="text-center">Student Name: <%= @assessment.student.name.full %></h1>
+  <%= form_with url: '', method: :put, id: 'assessment-form' do %>
+    <% @assessment.value.each do |key, value| %>
+      <div class="d-flex justify-content-around align-content-center mb-3">
+        <span><%= key %> </span>
+        <input type="text" value="<%= value %>" name="assessment[<%= key %>]" class="p-1">
+      </div>
+    <% end %>
+    <div class="text-center">
+      <button type="button" class="btn btn-primary" id="save-all">Save All Changes</button>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.getElementById('save-all').addEventListener('click', function() {
+    // Get all input elements
+    const inputs = document.querySelectorAll('input[name^="assessment"]');
+
+    // Create an object to hold all changes
+    let updates = {};
+    inputs.forEach(input => {
+      const key = input.name.match(/\[(.*?)\]/)[1]; // Extract the key from the input name
+      const value = input.value;
+      updates[key] = value;
+    });
+
+    // Send the batch update request
+    fetch(`/assessmens/<%= @assessment.id %>/batch_update`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': '<%= form_authenticity_token %>'
+      },
+      body: JSON.stringify({ updates: updates })
+    }).then(response => {
+      if (response.ok) {
+        alert('Changes saved successfully.');
+      } else {
+        alert('An error occurred while saving changes.');
+      }
+    }).catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while saving changes.');
+    });
+  });
+</script>

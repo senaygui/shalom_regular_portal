@@ -1,0 +1,27 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Course Offering</h1>
+  <div class="row">
+    <% @courses.each do |course| %>
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"><%= course.course_title %>- <%= course.course_code %></h5> <br>
+            
+            <p class="card-text"><%= truncate(course.course_description, length: 100) %></p>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Program: <%= course.program.program_name %></li>
+              <li class="list-group-item">Curriculum: <%= course.curriculum.curriculum_version %></li>
+              <li class="list-group-item">Year: <%= course.year %></li>
+              <li class="list-group-item">Semester: <%= course.semester %></li>
+              <li class="list-group-item">Credit Hour: <%= course.credit_hour %></li>
+              <li class="list-group-item">Lecture Hour: <%= course.lecture_hour %></li>
+              <li class="list-group-item">Lab Hour: <%= course.lab_hour %></li>
+              <li class="list-group-item">ECTS: <%= course.ects %></li>
+            </ul>
+            
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

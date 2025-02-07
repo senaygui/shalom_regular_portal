@@ -1,0 +1,39 @@
+<h2>Request Grade Change</h2>
+
+<%= form_with model: @grade_change, local: true do |form| %>
+  <% if @grade_change.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@grade_change.errors.count, "error") %> prohibited this grade change from being saved:</h2>
+      <ul>
+        <% @grade_change.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :reason %>
+    <%= form.text_area :reason, class: 'form-control', rows: 5 %>
+  </div>
+
+  <%= form.hidden_field :course_id, value: @course.id %>
+  <%= form.hidden_field :program_id, value: @program.id %>
+  <%= form.hidden_field :department_id, value: @department.id %>
+  <%= form.hidden_field :semester, value: @course.semester %>
+  <%= form.hidden_field :year, value: @course.year %>
+  <%= form.hidden_field :previous_result_total, value: @grade.assesment_total %>
+  <%= form.hidden_field :previous_letter_grade, value: @grade.letter_grade %>
+  <%= form.hidden_field :student_grade_id, value: @grade.id %>
+
+  <!-- Hidden fields for additional associations -->
+  <%= form.hidden_field :section_id, value: @section.id %>
+  <%= form.hidden_field :academic_calendar_id, value: @academic_calendar.id %>
+  <%= form.hidden_field :student_id, value: @student.id %>
+  <%= form.hidden_field :course_registration_id, value: @course_registration.id %>
+
+  <div class="form-group">
+    <%= form.submit 'Submit', class: 'btn btn-primary' %>
+  </div>
+<% end %>
+

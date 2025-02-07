@@ -1,0 +1,48 @@
+<!-- app/views/assessment_results/_form.html.erb -->
+<%= form_with(model: @assessment_result, local: true) do |form| %>
+  <% if @assessment_result.errors.any? %>
+    <div class="alert alert-danger">
+      <h4>There were errors:</h4>
+      <ul>
+        <% @assessment_result.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :student_id, "Student" %>
+    <%= form.collection_select :student_id, Student.all, :id, :full_name, prompt: "Select Student", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :course_id, "Course" %>
+    <%= form.collection_select :course_id, Course.all, :id, :name, prompt: "Select Course", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :assessment_id, "Assessment" %>
+    <%= form.collection_select :assessment_id, Assessment.all, :id, :name, prompt: "Select Assessment", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :score, "Score" %>
+    <%= form.number_field :score, class: "form-control", min: 0, max: 100 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :grade, "Grade" %>
+    <%= form.text_field :grade, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :comments, "Comments" %>
+    <%= form.text_area :comments, class: "form-control" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to 'Back to List', assessment_results_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>

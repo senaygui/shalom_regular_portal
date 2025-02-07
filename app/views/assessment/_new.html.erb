@@ -1,0 +1,114 @@
+<div class="panel_contents">
+  <form method="post" id="q_search" class="filter_form" action="/generate/payment/report.pdf" accept-charset="UTF-8">
+    <div class="filter_form_field">
+      <label for="year" class="label">Select Year:</label>
+      <select name="year" id="year" required class="form-select form-select-lg mb-3">
+        <option value="">Select year</option>
+        <% years.each do |year| %>
+          <option value="<%= year %>">Year <%= year %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="filter_form_field">
+      <label for="semester" class="label">Select Semester:</label>
+      <select name="semester" id="semester" required class="form-select form-select-lg mb-3">
+        <option value="">Select Semester</option>
+        <option value="1" selected> Semester 1</option>
+        <option value="2"> Semester 2</option>
+      </select>
+    </div>
+    <div class="filter_form_field">
+      <label for="program-list" class="label">Select Program:</label>
+      <select name="program" id="program-list" required class="form-select form-select-lg mb-3">
+        <option value="">Select Program</option>
+      </select>
+    </div>
+    <div class="filter_form_field">
+      <label for="course-list" class="label">Course List</label>
+      <select name="course" id="course-list" required class="form-select form-select-lg mb-3">
+        <option value="">Select Courses</option>
+      </select>
+    </div>
+    <div class="filter_form_field">
+      <label for="section" class="label">Select Section:</label>
+      <select name="section" id="section" class="form-select form-select-lg mb-3">
+        <option value="">Select Section</option>
+        <% sections.each do |section| %>
+          <option value="<%= section.id %>"><%= section.section_full_name %></option>
+        <% end %>
+      </select>
+    </div>
+    <input type="hidden" value="<%= current_admin_user.id %>" id="current_admin_user">
+  </form>
+  <div>
+    <table>
+      <thead id="thead">
+        <tr>
+          <th>Students List</th>
+        </tr>
+      </thead>
+      <tbody id="student-list">
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="success-message" class="notification-message" style="display: none;">Submission successful!</div>
+
+<button id="submit-assessments" class="submit-btn" type="button">Submit Assessments</button>
+
+<div id="submit-message" style="display: none;">Submission successful!</div>
+
+
+
+
+<style>
+  .submit-btn {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .submit-btn:hover {
+    background-color: #45a049;
+  }
+
+  .notification-message {
+    display: none;
+    color: white;
+    background-color: green;
+    font-size: 24px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+    border-radius: 10px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 40%;
+  }
+
+  .assessment-input {
+    border: 2px solid #007bff; /* Blue border */
+    padding: 10px; /* Increase padding */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #e9f5ff; /* Light blue background */
+    font-size: 16px; /* Larger font size */
+    width: 100px; /* Fixed width for consistency */
+  }
+
+  .assessment-input:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Add a blue shadow */
+  }
+  
+</style>

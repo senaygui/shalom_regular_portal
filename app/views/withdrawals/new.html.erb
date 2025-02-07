@@ -1,0 +1,63 @@
+<!-- app/views/withdrawals/new.html.erb -->
+<%= form_with(model: @withdrawal, local: true) do |form| %>
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h4>Submit Withdrawal Request</h4>
+          </div>
+          <div class="card-body">
+            <% if @withdrawal.errors.any? %>
+              <div id="error_explanation" class="alert alert-danger">
+                <h5><%= pluralize(@withdrawal.errors.count, "error") %> prohibited this withdrawal from being saved:</h5>
+                <ul>
+                  <% @withdrawal.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="form-group">
+              <%= form.label :reason_for_withdrawal %>
+              <%= form.select :reason_for_withdrawal, options_for_select([
+                'Graduating Student', 
+                'Transfer to other Institution', 
+                'Disciplinary Case', 
+                'Academic Dismissal', 
+                'Personal Problem', 
+                'Other (Indicate)', 
+                'Medical Case', 
+                'Financial Problem'
+              ]), {}, { class: 'form-control' } %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :other_reason %>
+              <%= form.text_field :other_reason, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :last_class_attended %>
+              <%= form.date_field :last_class_attended, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :fee_status %>
+              <%= form.select :fee_status, options_for_select([
+                'Deferred', 
+                '100% fee payer', 
+                '50% fee payer'
+              ]), {}, { class: 'form-control' } %>
+            </div>
+
+            <div class="form-group text-center">
+              <%= form.submit "Submit Withdrawal Request", class: 'btn btn-primary' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

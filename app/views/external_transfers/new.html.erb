@@ -1,0 +1,21 @@
+<div class="container my-4">
+  <% if alert%>
+    <p class="alert alert-danger"><%=alert%></p>
+  <%end%>
+  <div class="d-flex flex-column flex-md-row align-item-sm-start align-item-md-center">
+    <div class="mr-5">
+      <p class="text-center text-md text-sm-md text-bold py-2 text-info">Do you want to check <br/>
+        your application status? or <br/>
+        Want to add course exemption?<br/>
+        search using your ID</p>
+      <%=form_with url: '/applicant/search', method: 'get', id: 'search_form', class: '' do |form|%>
+        <%= form.text_field :query, class: 'form-control', required: true, placeholder: 'Previous Student ID'%>
+        <%= form.submit "Search", class: 'btn btn-primary mt-4' %>
+      <%end%>
+    </div>
+    <div class="flex-grow-1">
+      <h2 class="text-center text-xl text-sm-md text-bold py-2 text-primary">Apply for College Transfer</h2>
+      <%= render "form", external_transfer: @external_transfer %>
+    </div>
+  </div>
+</div>

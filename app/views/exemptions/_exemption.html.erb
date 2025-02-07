@@ -1,0 +1,28 @@
+<tr id="<%= dom_id exemption %>">
+  <td class="text-md text-bold text-capitalize">
+    <%= exemption.course_title %>
+  </td>
+  <td class="text-md text-bold text-capitalize">
+    <%= exemption.letter_grade %>
+  </td>
+  <td class="text-md text-bold text-capitalize">
+    <%= exemption.course_code %>
+  </td>
+  <td class="text-md text-bold text-capitalize">
+    <%= exemption.credit_hour %>
+  </td>
+  <td>
+    <span class="badge badge-info text-capitalize px-2 py-1"><%=exemption.dean_approval%></span>
+  </td>
+  <td>
+    <span class="badge badge-info text-capitalize px-2 py-1"><%=exemption.registeral_approval%></span>
+  </td>
+  <td>
+    <%=link_to "Edit",edit_exemptions_path(@applicant, exemption, @approved_by), class: 'btn btn-primary' %>
+  </td>
+  <td>
+  <%= button_to('Del', transfer_destroy_path, :confirm => 'Are you sure?',
+          :method => "delete", class: 'btn btn-danger', params: {id: exemption.id, applicant_id: @applicant.id, approved_by: @approved_by }) %>
+ 
+  </td>
+</tr>

@@ -1,0 +1,2 @@
+module DropCoursesHelper
+end

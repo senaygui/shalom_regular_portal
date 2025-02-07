@@ -1,0 +1,42 @@
+<div id="<%= dom_id external_transfer %>" class="card shadow-lg p-4 mb-4 bg-white rounded">
+  <div class="card-body">
+    <% if @external_transfer.accepted? %>
+      <h2 class="text-success font-weight-bold">Congratulations, <%= external_transfer&.first_name %> <%= external_transfer&.last_name %>! 🎉</h2>
+      <p class="text-primary mb-3">Your application has been accepted. Please review the details of your exempted courses below.</p>
+      
+      <% if @external_transfer.exemptions.any? %>
+        <div class="alert alert-info" role="alert">
+          <strong><%= @external_transfer.exemptions.size %></strong> course(s) have been added for exemption. For further details, please contact the Department Head.
+        </div>
+      <% else %>
+        <div class="alert alert-danger" role="alert">
+          No exemptions have been granted yet.
+        </div>
+      <% end %>
+      
+      <div class="text-center mt-4">
+        <%= link_to 'Proceed to Admission', admission_path, class: "btn btn-success btn-lg" %>
+      </div>
+      
+    <% elsif @external_transfer.rejected? %>
+      <h2 class="text-danger font-weight-bold">Dear <%= external_transfer&.first_name %> <%= external_transfer&.last_name %>,</h2>
+      <p class="text-danger mb-3">We regret to inform you that your application was not accepted.</p>
+      <p class="text-dark"><%= external_transfer&.message %></p>
+      
+    <% elsif @external_transfer.pending? %>
+      <h2 class="text-warning font-weight-bold">Dear <%= external_transfer&.first_name %> <%= external_transfer&.last_name %>,</h2>
+      <p class="text-warning mb-3">Your application is still pending. We will notify you once a decision has been made.</p>
+      <p class="text-dark"><%= external_transfer&.message %></p>
+    <% end %>
+    
+    <hr>
+    
+    <p class="text-muted">
+      <strong>Note:</strong> If you wish to check the status of your application later, please use your previous student ID:
+      <strong class="text-dark"><%= external_transfer.previous_student_id %></strong>.
+    </p>
+    <p class="text-muted">
+      <strong>Application Submitted On:</strong> <%= external_transfer&.created_at.strftime('%A, %B %d, %Y at %I:%M %p') %>
+    </p>
+  </div>
+</div>

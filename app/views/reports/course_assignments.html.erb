@@ -1,0 +1,36 @@
+<h1>Instructor Load Report</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Instructor Name</th>
+      <th>Email</th>
+      <th>Courses</th>
+      <th>Total Sections</th>
+      <th>Total ECTS</th>
+      <th>Weekly Teaching Load</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @instructor_data.each do |data| %>
+      <tr>
+        <td><%= "#{data[:instructor].first_name} #{data[:instructor].last_name}" %></td>
+        <td><%= data[:instructor].email %></td>
+        <td>
+          <ul>
+            <% data[:courses].each do |course, stats| %>
+              <li>
+                <strong><%= course.course_code %>:</strong>
+                <%= course.course_title %> 
+                (Credit Hour: <%= stats[:credit_hour] %>)
+              </li>
+            <% end %>
+          </ul>
+        </td>
+        <td><%= data[:courses].values.sum { |stats| stats[:sections_count] } %></td>
+        <td><%= data[:courses].values.sum { |stats| stats[:total_ects] } %></td>
+        <td><%= data[:courses].values.sum { |stats| stats[:weekly_teaching_load] } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

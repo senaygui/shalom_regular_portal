@@ -1,0 +1,81 @@
+####Randmoly assignment
+
+<div class="p-2 my-1">
+  <h2 class="text-center text-xl text-sm-md text-bold text-primary">Assign Section to Student</h2>
+  <%= link_to "Back to home page", admin_program_sections_path, class: 'btn btn-danger' %>
+
+  <%= form_tag(assign_sections_path, method: 'get', class: 'section w-50 mx-auto d-flex flex-column gap-6') do %>
+    <p class="text-center text-sm-md text-bold text-primary">Search Section and Student</p>
+    <%= collection_select(:program, :name, @programs, :id, :program_name, {prompt: 'Select a Program'}, required: true, class: "form-control") %>
+    
+    <select name="year" id="year" class="form-control mt-2" required>
+        <option value="">Select Year</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <select name="semester" id="semester" class="form-control mt-2" required>
+        <option value="">Select a Semester</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <%= collection_select(:student, :batch, Student.select(:batch).where.not(batch: nil).distinct, :batch, :batch, {prompt: 'Select a batch'}, required: true, class: 'form-control mt-2') %>
+    
+    <div class="text-center my-3">
+      <input type="submit" value="Search student and section" class="btn btn-success">
+    </div>
+  <% end %>
+
+  <% if @sections.present? %>
+    <div class="d-flex justify-content-between">
+      <div class="flex-grow-0 p-2">
+        <h4 class="text-center text-sm-md text-bold text-primary">Select Section</h4>
+        <%= form_with url: sections_path, method: :post, class: 'py-6' do |form| %>
+          <% @sections.each do |section| %>
+            <div>
+              <%= form.radio_button :section_id, section.id, required: true %>
+              <%= form.label :section, "#{section.section_full_name} (You can only assign #{section.total_capacity.to_i - section.students.count.to_i} students)" %>
+            </div>
+          <% end %>
+          
+          <input type="submit" value="Randomly Assign Students" class="btn btn-success">
+        <% end %>
+      </div>
+
+      <div class="flex-grow-1 p-2">
+        <h4 class="text-left text-sm-md text-bold text-primary"><%= @students.count %> unassigned students available</h4>
+        <table class="responsive nowrap table table-hover">
+          <thead>
+            <tr>
+              <th>Student Full Name</th>
+              <th>Student Program</th>
+              <th>Student ID</th>
+              <th>Year</th>
+              <th>Semester</th>
+              <th>Batch</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @students.each do |student| %>
+              <tr>
+                <td class="text-md text-bold text-capitalize"><%= student.name.full %></td>
+                <td class="text-md text-bold text-capitalize"><%= student.program.program_name %></td>
+                <td class="text-md text-bold text-capitalize"><%= student.student_id %></td>
+                <td class="text-md text-bold text-capitalize"><%= student.year %></td>
+                <td class="text-md text-bold text-capitalize"><%= student.semester %></td>
+                <td class="text-md text-bold text-capitalize"><%= student.batch %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <p class="text-left text-xl text-danger">No section available!</p>
+  <% end %>
+</div>

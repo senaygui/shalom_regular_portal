@@ -1,0 +1,26 @@
+<h1 class="my-4">Missing Assessments Report</h1>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th>Assigned Instructors</th>
+        <th>Courses Without Assessments</th>
+        <th>Year</th>
+        <th>Semester</th>
+        <th>Program</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @report_data.each do |data| %>
+        <tr>
+          <td><%= "#{data.first_name} #{data.last_name}" %></td>
+          <td><%= data.course_title %></td>
+          <td><%= data.year %></td>
+          <td><%= data.semester %></td>
+          <td><%= data.program_name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

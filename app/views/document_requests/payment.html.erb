@@ -1,0 +1,29 @@
+<%= form_with(model: @document_request, url: upload_receipt_document_request_path(@document_request), local: true, method: :patch, html: { multipart: true }) do |form| %>
+  <% if @document_request.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@document_request.errors.count, "error") %> prohibited this document request from being saved:</h2>
+      <ul>
+        <% @document_request.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <% if @fee.present? %>
+    <ul>
+      <li>Fee for <%= @document_request.document_type %>: <%= @fee %>ETB</li>
+    </ul>
+  <% else %>
+    <p>No payment information available for the selected document type.</p>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :receipt %>
+    <%= form.file_field :receipt, class: "form-control" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Upload Receipt', class: "btn btn-primary" %>
+  </div>
+<% end %>

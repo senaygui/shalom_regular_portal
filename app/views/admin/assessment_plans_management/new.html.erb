@@ -1,0 +1,13 @@
+<!-- app/views/admin/assessment_plans_management/new.html.erb -->
+<%= form_with(model: @assessment_plan, url: admin_assessment_plans_management_path) do |form| %>
+  <%= form.label :assessment_title %>
+  <%= form.text_field :assessment_title %>
+
+  <%= form.label :assessment_weight %>
+  <%= form.number_field :assessment_weight %>
+
+  <%= form.label :final_exam %>
+  <%= form.check_box :final_exam %>
+
+  <%= form.submit 'Create Assessment Plan' %>
+<% end %>

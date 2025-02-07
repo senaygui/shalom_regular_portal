@@ -1,0 +1,30 @@
+<%= simple_form_for(@external_transfer) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+  <div class="form-inputs">
+    <%= f.input :first_name, label: "First Name", required: true %>
+    <%= f.input :last_name, required: true %>
+    <%= f.input :email, required: true, label: 'Your Email'%>
+    <%= f.input :study_level, collection: %w[undergraduate graduate], required: true, label: 'Study Level', input_html: { id: 'study_level' } %>
+    <%= f.input :admission_type, collection: %w[regular extention], required: true, label: 'Admission Type', input_html: { id: 'admission_type' } %>
+    <%= f.input :department_id, collection: @departments, label_method: :department_name, value_method: :id, label: 'Department you want to join', required: true, input_html: { id: 'department_id' } %>
+    
+    <%= f.input :program_id, collection: @programs, label_method: :program_name, value_method: :id, label: 'Program', required: true, input_html: { id: 'program_id' } %>
+
+    <%= f.input :previous_institution, label: 'Previous Institution Name', required: true %>
+    <%= f.input :previous_student_id, label: 'Previous Student ID', required: true %>
+    <div>
+      <%= f.input :transcript, required: true, label: 'Upload Your Files'%>
+      <p class="text-sm">Combining all in single PDF. You may use free pdf merger online at <a href="https://smallpdf.com/merge-pdf">https://smallpdf.com/merge-pdf</a> </p>
+    </div>
+  </div>
+  <% is_edit = params[:action] == "edit" %>
+  <div class="form-actions">
+    <% if is_edit %>
+      <%= f.button :submit, value: 'Edit Apply for Transfer', class: 'btn btn-primary' %>
+      <%= link_to "Show this external transfer", @external_transfer, class: 'btn btn-primary' %>
+    <% else %>
+      <%= f.button :submit, value: 'Apply for Transfer', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+<% end %>

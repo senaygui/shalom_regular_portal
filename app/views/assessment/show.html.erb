@@ -1,0 +1,31 @@
+<h2>Add Assessment Result</h2>
+
+<%= form_with(model: [@assessment, @assessment.assessment_results.build], local: true) do |form| %>
+  <div class="field">
+    <%= form.label :score %>
+    <%= form.number_field :score %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Submit Result" %>
+  </div>
+<% end %>
+
+<h2>Assessment Results</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Score</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @assessment.assessment_results.each do |result| %>
+      <tr>
+        <td><%= result.score %></td>
+        <td><%= result.created_at.strftime("%B %d, %Y %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

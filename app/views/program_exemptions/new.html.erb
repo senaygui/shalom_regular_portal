@@ -1,0 +1,51 @@
+<!-- app/views/program_exemptions/new.html.erb -->
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4>New Program Exemption</h4>
+        </div>
+        <div class="card-body">
+          <%= form_with(model: @program_exemption, local: true) do |form| %>
+            <% if @program_exemption.errors.any? %>
+              <div id="error_explanation" class="alert alert-danger">
+                <h5><%= pluralize(@program_exemption.errors.count, "error") %> prohibited this program exemption from being saved:</h5>
+                <ul>
+                  <% @program_exemption.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="form-group">
+              <%= form.label :course_title %>
+              <%= form.text_field :course_title, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :letter_grade %>
+              <%= form.text_field :letter_grade, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :course_code %>
+              <%= form.text_field :course_code, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :credit_hour %>
+              <%= form.number_field :credit_hour, class: 'form-control' %>
+            </div>
+
+
+            <div class="form-group text-center">
+              <%= form.submit 'Request Exemption', class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

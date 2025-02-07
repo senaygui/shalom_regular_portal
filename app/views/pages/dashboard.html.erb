@@ -1,0 +1,192 @@
+<% provide(:title, "Dashboard") %>
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Dashboard</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-md-8">
+
+        <!-- Profile Image -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">My Profile</h3>
+          </div>
+          <div class="card-body box-profile">
+            <div class="text-center">
+              <% if current_student.photo.attached? %>
+                <%= image_tag(current_student.photo, size: '150x150', class: "profile-user-img img-fluid img-circle") %>
+              <% else %>
+                <%= image_tag("blank-profile-picture-973460_640.png", size: '150x150', class: "profile-user-img img-fluid img-circle") %>
+              <% end %>
+            </div>
+
+            <h3 class="profile-username text-center"><b><%= "#{current_student.first_name.upcase} #{current_student.middle_name.upcase} #{current_student.last_name.upcase}" %></b></h3>
+
+            <div class="text-center my-3">
+              <% if current_student.document_verification_status == "pending" %>
+                <%= link_to "Edit Profile", edit_student_registration_path, class: "btn btn-outline-primary btn-flat" %>
+              <% end %>
+            </div>
+            <ul class="list-group list-group-unbordered mb-3">
+              <li class="list-group-item">
+                <b>Student Fullname</b> <a class="text-muted float-right"><%= "#{current_student.first_name.upcase} #{current_student.middle_name.upcase} #{current_student.last_name.upcase}" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Student ID</b> <a class="text-muted float-right"><%= current_student.student_id.present? ? current_student.student_id : "Not Assigned Yet" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Program</b> <a class="text-muted float-right"><%= current_student.program&.program_name || "N/A" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Department</b> <a class="text-muted float-right"><%= current_student.program&.department&.department_name || "N/A" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Admission Type</b> <a class="text-muted float-right"><%= current_student.admission_type %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Academic Calendar</b>
+                <% if current_student.academic_calendar.present? %>
+                  <a href="<%= academic_calendar_path(current_student.academic_calendar.id) %>" class="clickable-link float-right">
+                    <%= current_student.academic_calendar.calender_year %>
+                  </a>
+                <% else %>
+                  <span class="float-right">N/A</span>
+                <% end %>
+              </li>
+              <li class="list-group-item">
+                <b>Study Level</b> <a class="text-muted float-right"><%= current_student.study_level %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Year</b> <a class="text-muted float-right"><%= current_student.year %></a>
+              </li>
+              <% if current_student.section&.section_full_name %>
+                <li class="list-group-item">
+                  <b>Section</b> <a class="text-muted float-right"><%= current_student.section.section_full_name %></a>
+                </li>
+              <% end %>
+              <li class="list-group-item">
+                <b>Documents</b><%= link_to "click here to see the attachments", documents_path, class: "text-blue float-right" %>
+              </li>
+              <li class="list-group-item">
+                <b>Account Verification</b> <a class="float-right badge badge-info p-2 text-white"><%= current_student.account_verification_status %></a>
+              </li>
+            </ul>
+
+            <% if current_student.transfers.any? { |t| t.registrar_approval == 'approved' && !t.course_exemption_processed } %>
+              <div class="alert alert-info mt-4" role="alert">
+                You have a transfer request approved by the registrar. Would you like to <%= link_to 'process course exemptions', process_course_exemption_transfer_path(current_student.transfers.find { |t| t.registrar_approval == 'approved' && !t.course_exemption_processed }), method: :patch %>?
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <% unless @student_grades.blank? %>
+          <div class="card card-success">
+            <div class="card-header">
+              <h3 class="card-title">
+                <strong>Year <%= current_student.year %> Semester <%= current_student.semester %> Student Grades</strong>
+              </h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <thead>
+                  <tr>
+                    <th>Course Title</th>
+                    <th>Grade Letter</th>
+                    <th>Total Mark</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @student_grades.each do |grade| %>
+                    <tr>
+                      <td><%= grade.course&.course_title || "N/A" %></td>
+                      <td><%= grade.letter_grade || "N/A" %></td>
+                      <td><%= grade.assesment_total || "N/A" %></td>
+                      <td>
+                        <%= link_to 'Request Grade Change', new_grade_change_path(course_id: grade.course.id, grade_id: grade.id), class: 'btn btn-primary btn-sm' %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer">
+              <% if @course && @course.id %>
+                <%= link_to 'Request Grade Change', new_grade_change_path(course_id: @course.id), class: "btn btn-primary" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%= render 'instruction' %>
+    
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Basic Information</h3>
+      </div>
+      <div class="card-body box-profile">
+        <ul class="list-group list-group-unbordered mb-3">
+          <li class="list-group-item">
+            <b>Email</b> <a class="text-muted float-right"><%= current_student.email %></a>
+          </li>
+          <li class="list-group-item">
+            <b>Gender</b> <a class="text-muted float-right"><%= current_student.gender %></a>
+          </li>
+          <li class="list-group-item">
+            <b>Birth Date</b> <a class="text-muted float-right"><%= current_student.date_of_birth.present? ? current_student.date_of_birth.strftime("%b %d, %Y") : "N/A" %></a>
+          </li>
+          <li class="list-group-item">
+            <b>Marital Status</b> <a class="text-muted float-right"><%= current_student.marital_status %></a>
+          </li>
+          <li class="list-group-item">
+            <b>Place Of Birth</b> <a class="text-muted float-right"><%= current_student.place_of_birth %></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .clickable-link {
+    color: #007bff; /* Bootstrap primary color */
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .clickable-link:hover {
+    color: #0056b3; /* Darker shade for hover effect */
+  }
+
+  .profile-user-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+  }
+</style>

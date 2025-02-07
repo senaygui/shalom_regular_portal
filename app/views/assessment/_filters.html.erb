@@ -1,0 +1,18 @@
+<!-- app/views/admin/assessments/_filters.html.erb -->
+<%= active_admin_form_for search, as: :q, url: collection_path, html: { method: :get } do |f| %>
+  <div class="filter_form_field">
+    <%= f.label :student_id_eq, 'Student' %>
+    <%= f.select :student_id_eq, options_for_select(Student.all.map { |student| ["#{student.first_name} #{student.last_name}", student.id] }, params.dig(:q, :student_id_eq)) %>
+  </div>
+  <div class="filter_form_field">
+    <%= f.label :course_id_eq, 'Course' %>
+    <%= f.select :course_id_eq, options_for_select(Course.all.map { |course| [course.course_title, course.id] }, params.dig(:q, :course_id_eq)) %>
+  </div>
+  <div class="filter_form_field">
+    <%= f.label :program_id_eq, 'Program' %>
+    <%= f.select :program_id_eq, options_for_select(Program.all.map { |program| [program.program_name, program.id] }, params.dig(:q, :program_id_eq)) %>
+  </div>
+  <div class="filter_form_buttons">
+    <%= f.submit 'Filter', class: 'button' %>
+  </div>
+<% end %>

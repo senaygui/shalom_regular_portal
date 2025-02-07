@@ -1,0 +1,16 @@
+<!-- app/views/assessment_results/show.html.erb -->
+<h1>Assessment Result Details</h1>
+
+<div class="result-details">
+  <p><strong>Student Name:</strong> <%= @assessment_result.student.full_name %></p>
+  <p><strong>Course Name:</strong> <%= @assessment_result.course.name %></p>
+  <p><strong>Assessment Name:</strong> <%= @assessment_result.assessment.name %></p>
+  <p><strong>Score:</strong> <%= @assessment_result.score %></p>
+  <p><strong>Grade:</strong> <%= @assessment_result.grade %></p>
+  <p><strong>Comments:</strong> <%= @assessment_result.comments %></p>
+</div>
+
+<div class="actions">
+  <%= link_to 'Edit', edit_assessment_result_path(@assessment_result), class: 'btn btn-warning' %>
+  <%= link_to 'Back to List', assessment_results_path, class: 'btn btn-secondary' %>
+</div>
