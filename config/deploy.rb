@@ -2,12 +2,12 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.17.3"
 
-set :application, "heuc"
+set :application, "master"
 # set :ssh_options, { :forward_agent => true }
-set :repo_url, "https://github.com/fenet/leadstarlatest.git"
+set :repo_url, "https://github.com/senaygui/hope_portal_system.git"
 
 
-set :git_http_username, 'fenet' 
+set :git_http_username, 'senaygui' 
 ask(:github_token, "github_token", echo: false) 
 set :git_http_password, fetch((:github_token))
 #set :git_strategy, Capistrano::Git::SubmoduleStrategy
