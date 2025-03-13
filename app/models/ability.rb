@@ -6,27 +6,27 @@ class Ability
 
     case user.role
 
-    #when "student"
+    # when "student"
     #  can :read, Notice
 
-    when "president"
-      can :manage, ActiveAdmin::Page, name: "Dashboard", namespace_name: "admin"
-      can :read, ActiveAdmin::Page, name: "Graduation", namespace_name: "admin"
+    when 'president'
+      can :manage, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'
+      can :read, ActiveAdmin::Page, name: 'Graduation', namespace_name: 'admin'
       can :read, AcademicCalendar
 
-    when "vice president"
-      can :manage, ActiveAdmin::Page, name: "Dashboard", namespace_name: "admin"
-      can :read, ActiveAdmin::Page, name: "Graduation", namespace_name: "admin"
+    when 'vice president'
+      can :manage, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'
+      can :read, ActiveAdmin::Page, name: 'Graduation', namespace_name: 'admin'
       can :read, AcademicCalendar
       can :read, Curriculum
 
-    when "program office"
-      can :manage, ActiveAdmin::Page, name: "Dashboard", namespace_name: "admin"
-      #can :manage, ClassSchedule
-      #can :manage, ExamSchedule
-      #can :read, AcademicCalendar
+    when 'program office'
+      can :manage, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'
+      # can :manage, ClassSchedule
+      # can :manage, ExamSchedule
+      # can :read, AcademicCalendar
 
-    when "admin"
+    when 'admin'
       # can :manage, ActiveAdmin::Page, name: "Calendar", namespace_name: "admin"
       can :read, UneditableCurriculum
       can :manage, Transfer
@@ -40,10 +40,10 @@ class Ability
       can :manage, Attendance
       can :manage, Session
       can :manage, FacultyDean
-      can :manage, ProgramExemption#, department_id: user.department.id
+      can :manage, ProgramExemption # , department_id: user.department.id
       can :manage, Readmission
       can :manage, ExternalTransfer
-      #can :manage, ClassSchedule
+      # can :manage, ClassSchedule
       can :manage, ClassScheduleWithFile
       can :manage, ExamScheduleWithFile
       can :manage, CourseOffering
@@ -88,7 +88,7 @@ class Ability
       can :manage, AddAndDrop
       can %i[read update], Dropcourse
       can %i[read update], AddCourse
-
+      can :manage, Assessment
       can :manage, OtherPayment
       can :manage, StudentGrade
       can :manage, Exemption
@@ -101,12 +101,12 @@ class Ability
       can :manage, AssessmentPlan, admin_user_id: user.id
       can %i[read update], MakeupExam
       can :read, CourseRegistration, course_id: Course.instructor_courses(user.id)
-      #can :manage, StudentGrade, course_id: Section.instructors(user.id)
-      #can %i[read destroy], StudentGrade, course_id: Course.instructor_courses(user.id)
+      # can :manage, StudentGrade, course_id: Section.instructors(user.id)
+      # can %i[read destroy], StudentGrade, course_id: Course.instructor_courses(user.id)
       can :read, Notice
       can :read, StudentGrade, course_id: Course.instructor_courses(user.id)
       can :update, StudentGrade, course_id: Course.instructor_courses(user.id)
-    # Destroy action with a block for additional conditions
+      # Destroy action with a block for additional conditions
       can :destroy, StudentGrade do |grade|
         Course.instructor_courses(user.id).include?(grade.course_id) && grade.created_at >= 15.days.ago
       end
@@ -114,11 +114,11 @@ class Ability
       # cannot :destroy, StudentGrade
       can %i[create read destroy], Assessment, admin_user_id: user.id
       can :manage, Attendance
-      #can :update, Attendance, section_id: Section.instructor_courses(user.id)
-      #can :manage, Session
-      #can :read, Session, course_id: Section.instructors(user.id)
-      #can :update, Session, course_id: Section.instructors(user.id)
-      #cannot :destroy, Session, course_id: Section.instructors(user.id)
+      # can :update, Attendance, section_id: Section.instructor_courses(user.id)
+      # can :manage, Session
+      # can :read, Session, course_id: Section.instructors(user.id)
+      # can :update, Session, course_id: Section.instructors(user.id)
+      # cannot :destroy, Session, course_id: Section.instructors(user.id)
       can :read, GradeChange, course_id: Section.instructors(user.id)
       can :update, GradeChange, course_id: Section.instructors(user.id)
     when 'finance'
@@ -147,7 +147,7 @@ class Ability
       can :manage, ActiveAdmin::Page, name: 'OnlineStudentGrade', namespace_name: 'admin'
       can :manage, AcademicCalendar
       can :manage, AdminUser, role: 'instructor'
-      can %i[read update], Exemption#, dean_approval_status: 'dean_approval_approved'
+      can %i[read update], Exemption # , dean_approval_status: 'dean_approval_approved'
       can :manage, Faculty
       can :read, CourseModule
       can :read, Program
@@ -206,7 +206,7 @@ class Ability
 
       can :manage, AddAndDrop
       cannot :destroy, AddAndDrop, created_by: 'self'
-      
+
     when 'distance_registrar'
       can :manage, CourseSection
       can :manage, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'
@@ -273,7 +273,7 @@ class Ability
       can :read, Program
       # TODO: after one college created disable new action
       # cannot :destroy, College, id: 1
-      
+
       can :read, Department
       can :read, CourseModule
       can :read, Course
@@ -346,7 +346,7 @@ class Ability
       can :manage, Invoice
     when 'department head'
       can :read, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'
-      #can :manage, ActiveAdmin::Page, name: 'ExternalTransfer', namespace_name: 'admin'
+      # can :manage, ActiveAdmin::Page, name: 'ExternalTransfer', namespace_name: 'admin'
       can :manage, ExternalTransfer, department_id: user.department_id
       can %i[read update], Department, department_name: user.department.department_name
       can %i[read update], Dropcourse, department_id: user.department_id
@@ -354,12 +354,12 @@ class Ability
       can %i[read update destroy], CourseModule, department_id: user.department.id
       can :create, CourseModule
       # can :manage, Exemption
-      can :manage, ProgramExemption#, department_id: user.department.id
+      can :manage, ProgramExemption # , department_id: user.department.id
       can :manage, Course, program: { department_id: user.department.id }
       can :create, Course
       can :manage, AdminUser, role: 'instructor'
       can :create, AdminUser
-      can :manage, Assessment, student: { department_id: user.department_id } 
+      can :manage, Assessment, student: { department_id: user.department_id }
       can %i[read update destroy], Program, department_id: user.department.id
       can :create, Program
       can %i[read update destroy], Curriculum, program: { department_id: user.department.id }
@@ -368,7 +368,7 @@ class Ability
       can :create, GradeSystem
       can :manage, AssessmentPlan, course: { program: { department_id: user.department.id } }
       can :create, AssessmentPlan
-      can %i[read update], Transfer#, department_id: user.department.id
+      can %i[read update], Transfer # , department_id: user.department.id
       can :read, AcademicCalendar
       can :read, Section, program: { department_id: user.department.id }
       can :read, Student, department_id: "#{user.department_id}"
@@ -377,10 +377,10 @@ class Ability
       can :read, Attendance, program: { department_id: user.department.id }
       can :read, Session, course: { program: { department_id: user.department.id } }
       can :read, StudentGrade, department_id: user.department.id
-      #can %i[read update], StudentGrade, department_id: user.department.id
+      # can %i[read update], StudentGrade, department_id: user.department.id
       can %i[read update], GradeChange, department_id: user.department.id
       can %i[read update], GradeReport, department_id: user.department.id
-      can %i[read update], Withdrawal#, department_id: user.department.id
+      can %i[read update], Withdrawal # , department_id: user.department.id
       can %i[read update], AddAndDrop, department_id: user.department.id
       can %i[read update], MakeupExam, department_id: user.department.id
     when 'dean'
@@ -399,10 +399,10 @@ class Ability
       can :manage, AssessmentPlan
       can %i[read update], Exemption
       can :manage, Notice
-      can :manage, Department, faculty_id: user.faculty_id 
+      can :manage, Department, faculty_id: user.faculty_id
     when 'faculty dean'
       can :manage, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'
-      can :manage, Department, faculty_id: user.faculty.id 
+      can :manage, Department, faculty_id: user.faculty.id
      # can %i[read update destroy], Program, department_id: user.department.id
     when 'library head'
       can :manage, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'

@@ -2,10 +2,10 @@ class Assessment < ApplicationRecord
   # #vaildations
   # validate :limit_assessment_result
   # #associations
-  # belongs_to :student_grade
+  belongs_to :student_grade
   belongs_to :student, optional: true
   belongs_to :course, optional: true
-  # belongs_to :assessment_plan, optional: true
+  belongs_to :assessment_plan, optional: true
   has_many :grade_changes
   has_many :makeup_exams
   has_many :assessment_results
