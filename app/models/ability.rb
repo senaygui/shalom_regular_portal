@@ -88,7 +88,7 @@ class Ability
       can :manage, AddAndDrop
       can %i[read update], Dropcourse
       can %i[read update], AddCourse
-      can :manage, Assessment
+      # can :manage, Assessment
       can :manage, OtherPayment
       can :manage, StudentGrade
       can :manage, Exemption
@@ -112,7 +112,7 @@ class Ability
       end
       can :manage, Program
       # cannot :destroy, StudentGrade
-      can %i[create read destroy], Assessment, admin_user_id: user.id
+      # can %i[create read destroy], Assessment, admin_user_id: user.id
       can :manage, Attendance
       # can :update, Attendance, section_id: Section.instructor_courses(user.id)
       # can :manage, Session
