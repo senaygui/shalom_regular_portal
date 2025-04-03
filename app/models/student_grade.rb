@@ -1,14 +1,12 @@
 class StudentGrade < ApplicationRecord
   after_create :generate_assessment
-  after_create -> { course_registration.active_no! }
+  # after_create -> { course_registration.active_no! }
 
-  # after_create do
-  #   if self.letter_grade == 'F' || self.letter_grade == 'f'
-  #       Course.increment_counter(:f_counter, self)
-  #   end
-  # end
+  after_create do
+    Course.increment_counter(:f_counter, self) if letter_grade == 'F' || letter_grade == 'f'
+  end
 
-  # after_save :update_subtotal
+  after_save :update_subtotal
   # after_save :add_course_registration
   # after_save :update_grade_report
   validates :student, presence: true
@@ -32,14 +30,17 @@ class StudentGrade < ApplicationRecord
   end
 
   def generate_assessment
+    Rails.logger.info "==> after_create callback is running for StudentGrade #{id}"
     course.assessment_plans.each do |plan|
-      Assessment.create do |assessment|
+      Assessment.create! do |assessment|
+        assessment.student_grade_id = id
         assessment.course_id = course.id
         assessment.student_id = student.id
         assessment.course_registration_id = course_registration.id
         assessment.assessment_plan_id = plan.id
         assessment.final_exam = plan.final_exam
         assessment.created_by = created_by
+        assessment.admin_user_id = AdminUser.all.first.id
       end
     end
   end
@@ -105,7 +106,7 @@ class StudentGrade < ApplicationRecord
         ).last.letter_grade
         grade_letter_value = student.program.grade_systems.last.grades.where('min_row_mark <= ?', assesment_total1).where(
           'max_row_mark >= ?', assesment_total1
-        ).last.grade_point * course.credit_hour
+        ).last.grade_point
         update_columns(letter_grade: grade_in_letter)
         update_columns(grade_point: grade_letter_value)
       elsif assessments.where(result: nil, final_exam: true).present?
@@ -123,18 +124,18 @@ class StudentGrade < ApplicationRecord
 
   private
 
-  def generate_assessment
-    course.assessment_plans.each do |plan|
-      Assessment.create do |assessment|
-        assessment.course_id = course.id
-        assessment.student_id = student.id
-        assessment.student_grade_id = id
-        assessment.assessment_plan_id = plan.id
-        assessment.final_exam = plan.final_exam
-        assessment.created_by = created_by
-      end
-    end
-  end
+  # def generate_assessment
+  #   course.assessment_plans.each do |plan|
+  #     Assessment.create do |assessment|
+  #       assessment.course_id = course.id
+  #       assessment.student_id = student.id
+  #       assessment.student_grade_id = id
+  #       assessment.assessment_plan_id = plan.id
+  #       assessment.final_exam = plan.final_exam
+  #       assessment.created_by = created_by
+  #     end
+  #   end
+  # end
 
   def update_grade_report
     if course_registration.semester_registration.grade_report.present?

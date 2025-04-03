@@ -49,7 +49,9 @@ class SemesterRegistration < ApplicationRecord
         report.study_level = self.student.study_level
         report.semester = self.student.semester
         report.year = self.student.year
-
+        report.dean_approval = 'pending'
+        report.department_approval = 'pending'
+        report.registrar_approval = 'pending'
        ####report.total_credit_hour = self.course_registrations.where(enrollment_status: "enrolled").collect { |oi| (!!(oi.student_grade&.letter_grade != "I") && oi.student_grade.present? && !!(oi.student_grade&.letter_grade != "NG")) ? (oi.course.credit_hour) : 0 }.sum
        ####report.total_grade_point = self.course_registrations.where(enrollment_status: "enrolled").collect { |oi| (!!(oi.student_grade&.letter_grade != "I") && oi.student_grade.present? && !!(oi.student_grade&.letter_grade != "NG")) ? (oi.student_grade.grade_point) : 0 }.sum
         

@@ -1,30 +1,35 @@
 class StudentCopy < Prawn::Document
   def initialize(students, gc_date)
-    super(:page_layout => :landscape, background: open("app/assets/images/logo.png"))
+    super(page_layout: :landscape, background: open('app/assets/images/logo.png'))
     @students = students
     gc_date = Date.parse(gc_date)
-    @students.each_with_index do |stud, index|
-      text "HEUC", :inline_format => true, size: 12, align: :center, font_style: :bold
+    @students.each_with_index do |stud, _index|
+      text 'HEUC', inline_format: true, size: 12, align: :center, font_style: :bold
       move_down 10
-      text "OFFICE OF THE REGISTRAR", inline_format: true, size: 12, align: :center, font_style: :bold
+      text 'OFFICE OF THE REGISTRAR', inline_format: true, size: 12, align: :center, font_style: :bold
       move_down 10
-      text "<u>STUDENT ACADEMIC RECORD</u>", inline_format: true, size: 12, font_style: :bold, align: :center
+      text '<u>STUDENT ACADEMIC RECORD</u>', inline_format: true, size: 12, font_style: :bold, align: :center
       move_down 10
       table [
-              [" ", " ", "Admission Classification: #{stud.admission_type.capitalize}"],
-              ["P.O.Box 12382, Addis Ababa, Ethiopia", " ", "Department: #{stud.department.department_name.capitalize}"],
-              ["Full Name: #{stud.name.full.capitalize} #{stud.middle_name}", "Faculty: #{stud.department.faculty.faculty_name.capitalize}", "Medium of Instruction: English"],
-              ["ID Number: #{stud.student_id}", "Sex: #{stud.gender}", "Graduation Status: #{stud.graduation_status.capitalize}"],
-              ["Date of Admission: #{stud.admission_date}", "Traning Level: #{stud.study_level == "undergraduate" ? "Bachelor Degree" : "Masters Degree"}", "Date of Graduation: #{gc_date.strftime("%B,%d %Y")}"],
-            ], width: 700, :cell_style => { :border_width => 0, padding: 2, font_style: :bold, size: 11 }
+              [' ', ' ', "Admission Classification: #{stud.admission_type.capitalize}"],
+              ['P.O.Box 12382, Addis Ababa, Ethiopia', ' ',
+               "Department: #{stud.department.department_name.capitalize}"],
+              ["Full Name: #{stud.name.full.capitalize} #{stud.middle_name}",
+               "Faculty: #{stud.department.faculty.faculty_name.capitalize}", 'Medium of Instruction: English'],
+              ["ID Number: #{stud.student_id}", "Sex: #{stud.gender}",
+               "Graduation Status: #{stud.graduation_status.capitalize}"],
+              ["Date of Admission: #{stud.admission_date}",
+               "Traning Level: #{stud.study_level == 'undergraduate' ? 'Bachelor Degree' : 'Masters Degree'}", "Date of Graduation: #{gc_date.strftime('%B,%d %Y')}"]
+            ], width: 700, cell_style: { border_width: 0, padding: 2, font_style: :bold, size: 11 }
       move_down 10
       stroke_horizontal_rule
       move_down 10
-      student_copy = stud.course_registrations.order(:semester).group_by { |c| [c.semester, c.academic_year] }
+      student_copy = stud.course_registrations.order(:semester).group_by { |c| [c.semester, c.year] }
       student_copy.each do |key, value|
-        text "<u> Academic Year:#{key[1]}/#{key[1] + 1} Semester #{key[0]}</u>", size: 14, font_style: :bold, inline_format: true
+        text "<u> Academic Year:#{key[1]} Semester #{key[0]}</u>", size: 14, font_style: :bold,
+                                                                       inline_format: true
         move_down 10
-        table each_stud_in_table(value, key[0]), :cell_style => { size: 9, font_style: :bold, align: :center } do
+        table each_stud_in_table(value, key[0]), cell_style: { size: 9, font_style: :bold, align: :center } do
           row(0).font_style = :bold
           column(1).align = :left
           cells[3, 0].align = :right
@@ -36,8 +41,9 @@ class StudentCopy < Prawn::Document
         move_down 10
       end
       move_down 10
-      text "THIS TRANSCRIPT IS OFFICIAL ONLY WHEN SIGNED AND SEALED BY THE REGISTRAR.", align: :center
-      table [["DATE OF ISSUE: #{Date.current.strftime("%B,%d %Y")}", " " "REGISTRAR: ____________________"]], width: 700, position: :right, cell_style: { border_width: 0, font_style: :bold }
+      text 'THIS TRANSCRIPT IS OFFICIAL ONLY WHEN SIGNED AND SEALED BY THE REGISTRAR.', align: :center
+      table [["DATE OF ISSUE: #{Date.current.strftime('%B,%d %Y')}", ' ' 'REGISTRAR: ____________________']],
+            width: 700, position: :right, cell_style: { border_width: 0, font_style: :bold }
       header_footer
 
       start_new_page
@@ -45,17 +51,35 @@ class StudentCopy < Prawn::Document
   end
 
   def each_stud_in_table(value, semester)
-    student_grade = GradeReport.where(semester: semester, year: value.first.year).last
+    student_grade = GradeReport.where(semester:, year: value.first.year).last
+
+    # Handle nil student_grade to avoid NoMethodError
+    if student_grade.nil?
+      Rails.logger.error "No GradeReport found for semester: #{semester}, year: #{value.first.year}"
+      student_grade = GradeReport.new(sgpa: 0, total_credit_hour: 0, total_grade_point: 0, cgpa: 0)
+    end
+
     [
-      ["Course Code", "Course title", "Cr.Hrs", "Letter Grade", "Grade Point", "Remark"],
-    ] + value.map.with_index do |cr, index|
-      [cr.course.course_code, cr.course.course_title, cr.course.credit_hour, cr.course.student_grades.last.letter_grade, cr.course.student_grades.last.grade_point, ""]
-    end + [[" ", "", "", "", "", " "], ["SGPA", student_grade.sgpa, student_grade.total_credit_hour, "", student_grade.total_grade_point, ""], semester == 1 ? [" ", " ", "", "", "", " "] : ["CGPA", student_grade.cgpa, student_grade.total_credit_hour, "", student_grade.total_grade_point, ""]] + get_major_cumulative(value)
+      ["Academic Year: #{value.first.academic_year} Semester #{semester}"],
+      ['Course Code', 'Course Title', 'Cr. hr', 'Grade', 'Grade pts']
+    ] + value.map do |cr|
+      student_grade_entry = cr.course.student_grades.last
+      [
+        cr.course.course_code,
+        cr.course.course_title,
+        cr.course.credit_hour,
+        student_grade_entry&.letter_grade || 'N/A',
+        student_grade_entry&.grade_point || 'N/A'
+      ]
+    end + [
+      ['SGPA', student_grade.sgpa, student_grade.total_credit_hour, '', student_grade.total_grade_point],
+      ['CGPA', student_grade.cgpa, student_grade.total_credit_hour, '', student_grade.total_grade_point]
+    ]
   end
 
   def get_major_cumulative(crg)
     major = Major.major_point_and_hour(crg)
-    [[" ", "Major Cumulative Average(MGPA)", "#{major[0]}", " ", "#{major[1]}", " "]]
+    [[' ', 'Major Cumulative Average(MGPA)', "#{major[0]}", ' ', "#{major[1]}", ' ']]
   end
 
   def header_footer
@@ -66,21 +90,20 @@ class StudentCopy < Prawn::Document
     #         stroke_horizontal_rule
     #     end
 
-    bounding_box [bounds.left, bounds.bottom + 40], :width => bounds.width do
+    bounding_box [bounds.left, bounds.bottom + 40], width: bounds.width do
       # stroke_horizontal_rule
 
       # repeat :all do
       text "Grading system:A=Excellent,B=Good,C=Satisfactory,D=Unsatisfactory/Failing,F=Fail,I=Incomplete,DO=Dropout,** Project/Senior Paper, EX=Exempted, NG= No Grade, P=Pass, *= Course Repeated
                      ", align: :left, font_style: :bold
-      text "Points: A=4,A-=3.75,B+=3.5,B=3,B-=2.75,C+=2.5,C=2,C-=1.75,D=1,F=0", font_style: :bold
+      text 'Points: A=4,A-=3.75,B+=3.5,B=3,B-=2.75,C+=2.5,C=2,C-=1.75,D=1,F=0', font_style: :bold
       # end
     end
   end
 end
 
-
 ################################## - LAST ONE - ###################################
-#class StudentCopy < Prawn::Document
+# class StudentCopy < Prawn::Document
 #  def initialize(students, gc_date)
 #    super(page_layout: :landscape)
 #    @students = students
@@ -150,10 +173,10 @@ end
 #      semester_1_label = year == 2023 ? "Year1-Semester1" : "Year2-Semester1"
 #      semester_2_label = year == 2023 ? "Year1-Semester2" : "Year2-Semester2"
 #
-#  
+#
 #        data = [
 #          [semester_1_label, "", "", "", "", semester_2_label, "", "", "", ""],
-#          ["Course Code", "Course Title", "Letter Grade", "Cr.Hrs", "Grade Point", 
+#          ["Course Code", "Course Title", "Letter Grade", "Cr.Hrs", "Grade Point",
 #          "Course Code", "Course Title", "Letter Grade", "Cr.Hrs", "Grade Point"]
 #          ]
 #
@@ -294,17 +317,17 @@ end
 #  def footer
 #    # Check if enough space is available on the current page
 #   # move_down 10  # Optional: Adjust this to provide some buffer space before the footer
-#  
+#
 #    if cursor > 50  # Ensure there is enough space (adjust '50' based on your footer content height)
 #      # Create a bounding box for the footer
 #      bounding_box([bounds.left, bounds.bottom + 20], width: bounds.width) do
 #        # Add the grading system text
 #        text "Grading system: A=Excellent, B=Good, C=Satisfactory, D=Unsatisfactory/Failing, F=Fail, I=Incomplete, DO=Dropout, ** Project/Senior Paper, EX=Exempted, NG= No Grade, P=Pass, *= Course Repeated, Points: A=4, A-=3.75, B+=3.5, B=3, B-=2.75, C+=2.5, C=2, C-=1.75, D=1, F=0", align: :left, size: 6, style: :bold
 #    #    move_down 2 # Move down a bit for spacing
-#  
+#
 #        # Add the date of issue
 #        #text "DATE OF ISSUE: #{Date.current.strftime('%B %d, %Y')}", size: 6, style: :bold
-#  
+#
 #        # Add the registrar line
 #        text "REGISTRAR: ____________________", size: 6, style: :bold, align: :center
 #      end
@@ -312,6 +335,6 @@ end
 #      start_new_page  # Force a new page if not enough space for the footer
 #      footer  # Add the footer on the new page
 #    end
-#  end  
-#end
+#  end
+# end
 #

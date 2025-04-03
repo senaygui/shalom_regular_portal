@@ -230,37 +230,176 @@ ActiveAdmin.register Course do
     f.actions
   end
 
-  show do
-    attributes_table do
-      row :course_title
-      row :course_code
-      row :credit_hour
-      row :year
-      row :semester
-      row :program do |course|
-        link_to course.program.program_name, [:admin, course.program] if course.program.present?
+  show title: :course_title do
+    tabs do
+      tab 'Course Information' do
+        columns do
+          column do
+            panel 'Course information' do
+              attributes_table_for course do
+                row :course_title
+                row :course_code
+                row 'module title' do |d|
+                  link_to d.course_module.module_title, admin_course_module_path(d.course_module.id)
+                end
+                row :program do |m|
+                  link_to m.program.program_name, [:admin, m.program]
+                end
+                row :curriculum_version do |m|
+                  link_to m.curriculum.curriculum_version, [:admin, m.curriculum]
+                end
+                row :course_description
+                row 'Course Outline' do |pr|
+                  if pr.course_outline.attached?
+                    link_to 'attachement',
+                            rails_blob_path(pr.course_outline, disposition: 'preview')
+                  end
+                end
+                row :credit_hour
+                row :lecture_hour
+                row :lab_hour
+                row 'Contact Hour' do |c|
+                  c.ects
+                end
+                # row :ects
+                row :year
+                row :semester
+                row :course_starting_date
+                row :course_ending_date
+                row :created_by
+                row :last_updated_by
+                row :created_at
+                row :updated_at
+              end
+            end
+          end
+          column do
+            panel 'Course Prerequisites' do
+              table_for course.course_prerequisites do
+                column :course_title do |c|
+                  link_to c.prerequisite.course_title, admin_courses_path(c.prerequisite)
+                end
+                column :course_code do |c|
+                  c.prerequisite.course_code
+                end
+                column 'Added by', :created_by
+                column 'Added' do |c|
+                  c.created_at.strftime('%b %d, %Y')
+                end
+              end
+            end
+          end
+        end
       end
-      row :curriculum do |course|
-        link_to course.curriculum.curriculum_version, [:admin, course.curriculum] if course.curriculum.present?
-      end
-      row :course_description
-      row :created_by
-      row :last_updated_by
-      row :created_at
-      row :updated_at
+      # if (current_admin_user.role == "admin")
+      #   tab "Course section" do
+      #   end
+      # end
+      #
+      tab 'currently enrolled students' do
+        panel 'currently enrolled students' do
+          table_for course.course_registrations.where(enrollment_status: 'enrolled').where(academic_calendar_id: current_academic_calendar(
+            course.program.study_level, course.program.admission_type
+          )).where(semester: current_semester(
+            course.program.study_level, course.program.admission_type
+          )).order('student_full_name ASC') do
+            column 'Student Full Name' do |n|
+              link_to n.student_full_name, admin_student_path(n.student)
+            end
+            column 'Student ID' do |n|
+              n.student.student_id
+            end
+            column 'Academic calendar' do |n|
+              n.academic_calendar.calender_year
+            end
+            column 'Year' do |s|
+              s.year
+            end
+            column 'Semester' do |n|
+              n.semester
+            end
+            column 'Section' do |n|
+              n.section.section_short_name if n.section.present?
+            end
+            column 'Program Section' do |n|
+              n.semester_registration.section.section_short_name if n.semester_registration.section.present?
+            end
+            column 'Add At', sortable: true do |c|
+              c.created_at.strftime('%b %d, %Y')
+            end
 
-      # Display the course outline
-      row :course_outline do |course|
-        if course.course_outline.attached?
-          link_to 'Download Course Outline', rails_blob_path(course.course_outline, disposition: 'attachment'),
-                  target: '_blank'
-        else
-          'No course outline available'
+            # column "links", sortable: true do |c|
+            #     "#{link_to("View", admin_assessment_plan_path(c))} #{link_to "Edit", edit_admin_course_path(course.id, page_name: "add_assessment")}".html_safe
+            # end
+          end
+        end
+      end
+      tab 'Assessment Plan' do
+        columns do
+          column min_width: '70%' do
+            panel 'Assessment Plan Information' do
+              table_for course.assessment_plans.order('created_at ASC') do
+                column  :assessment_title
+                column  :assessment_weight
+                column 'Added At', sortable: true do |c|
+                  c.created_at.strftime('%b %d, %Y')
+                end
+                column 'Updated At', sortable: true do |c|
+                  c.updated_at.strftime('%b %d, %Y')
+                end
+
+                column  :created_by
+                column  :updated_by
+                column 'links', sortable: true do |c|
+                    "#{link_to('View',
+                               admin_assessment_plan_path(c))} #{link_to 'Edit',
+                                                                         edit_admin_assessment_plan_path(c)}".html_safe
+                end
+              end
+            end
+          end
+          column max_width: '27%' do
+            panel 'Assessment Plan Summery' do
+              attributes_table_for course do
+                row :total_assesement do |s|
+                  s.assessment_plans.count
+                end
+                row :total_assesement_weight do |s|
+                  s.assessment_plans.pluck(:assessment_weight).sum
+                end
+              end
+            end
+          end
+        end
+      end
+      tab 'Course Enrollement Report' do
+      end
+      tab 'Instructors Information' do
+        panel 'Assessment Plan Information' do
+          table_for course.course_instructors.order('created_at ASC') do
+            column 'Instructor Name' do |c|
+              link_to c.admin_user.name.full, admin_instructor_path(c.admin_user)
+            end
+            # column "Section" do |c|
+            #   link_to c.course_section.section_short_name, admin_course_section_path(c.course_section)
+            # end
+            column 'Section' do |c|
+              link_to c.section.section_short_name, admin_program_section_path(c.section)
+            end
+            column 'Academic Calendar' do |c|
+              link_to c.academic_calendar.calender_year, admin_academic_calendar_path(c.academic_calendar)
+            end
+            column :year
+            column :semester
+            column :created_by
+            column :updated_by
+            column 'Add At', sortable: true do |c|
+              c.created_at.strftime('%b %d, %Y')
+            end
+          end
         end
       end
     end
-
-    active_admin_comments
   end
 
   action_item :edit, only: :show, priority: 1 do

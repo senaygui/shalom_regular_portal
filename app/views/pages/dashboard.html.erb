@@ -141,35 +141,36 @@
             </div>
           </div>
         <% end %>
+        <%= render 'instruction' %>
+    
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Basic Information</h3>
+          </div>
+          <div class="card-body box-profile">
+            <ul class="list-group list-group-unbordered mb-3">
+              <li class="list-group-item">
+                <b>Email</b> <a class="text-muted float-right"><%= current_student.email %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Gender</b> <a class="text-muted float-right"><%= current_student.gender %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Birth Date</b> <a class="text-muted float-right"><%= current_student.date_of_birth.present? ? current_student.date_of_birth.strftime("%b %d, %Y") : "N/A" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Marital Status</b> <a class="text-muted float-right"><%= current_student.marital_status %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Place Of Birth</b> <a class="text-muted float-right"><%= current_student.place_of_birth %></a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
-    <%= render 'instruction' %>
-    
-    <div class="card card-primary">
-      <div class="card-header">
-        <h3 class="card-title">Basic Information</h3>
-      </div>
-      <div class="card-body box-profile">
-        <ul class="list-group list-group-unbordered mb-3">
-          <li class="list-group-item">
-            <b>Email</b> <a class="text-muted float-right"><%= current_student.email %></a>
-          </li>
-          <li class="list-group-item">
-            <b>Gender</b> <a class="text-muted float-right"><%= current_student.gender %></a>
-          </li>
-          <li class="list-group-item">
-            <b>Birth Date</b> <a class="text-muted float-right"><%= current_student.date_of_birth.present? ? current_student.date_of_birth.strftime("%b %d, %Y") : "N/A" %></a>
-          </li>
-          <li class="list-group-item">
-            <b>Marital Status</b> <a class="text-muted float-right"><%= current_student.marital_status %></a>
-          </li>
-          <li class="list-group-item">
-            <b>Place Of Birth</b> <a class="text-muted float-right"><%= current_student.place_of_birth %></a>
-          </li>
-        </ul>
-      </div>
-    </div>
+
   </div>
 </section>
 

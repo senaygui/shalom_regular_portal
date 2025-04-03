@@ -4,11 +4,9 @@ class CourseRegistration < ApplicationRecord
   after_save :add_grade
   after_save :attribute_assignment
   after_save do
-    if self.add_course.present?
-      self.add_course.taken!
-    end
+    add_course.taken! if add_course.present?
   end
-  ##associations
+  # #associations
   belongs_to :semester_registration
   belongs_to :department
   belongs_to :course
@@ -33,23 +31,26 @@ class CourseRegistration < ApplicationRecord
   enum is_active: {
     no: 0,
     yes: 1
-  }, _prefix: "active"
+  }, _prefix: 'active'
 
   def get_academic_year
-    "#{self.academic_year - 1}/#{self.academic_year}"
+    "#{academic_year - 1}/#{academic_year}"
   end
+
   def self.get_course_per_student(student_ids)
-    self.where(student_id: student_ids).includes(:student).includes(:course).includes(:student_grade)
+    where(student_id: student_ids).includes(:student).includes(:course).includes(:student_grade)
   end
+
   def add_grade
-    if self.section.present? && !self.student_grade.present?
-      StudentGrade.create do |student_grade|
-        student_grade.course_registration_id = self.id
-        student_grade.student_id = self.student.id
-        student_grade.course_id = self.course.id
-        student_grade.department_id = self.department.id
-        student_grade.program_id = self.program.id
-        student_grade.created_by = self.updated_by
+    if section.present? && !student_grade.present?
+      StudentGrade.create! do |student_grade|
+        student_grade.course_registration_id = id
+        student_grade.student_id = student.id
+        student_grade.course_id = course.id
+        student_grade.department_id = department.id
+        student_grade.program_id = program.id
+        student_grade.created_by = updated_by
+        # student_grade.department_head_date_of_response = Time.now
       end
     end
   end
@@ -75,21 +76,19 @@ class CourseRegistration < ApplicationRecord
   # end
 
   def check_prerequisites
-    prerequisites = Prerequisite.where(course_id: self.course_id)
+    prerequisites = Prerequisite.where(course_id:)
 
     prerequisites.each do |prerequisite|
       prerequisite_course = prerequisite.prerequisite
-      student_grade = StudentGrade.find_by(student_id: self.student_id, course_id: prerequisite_course.id)
+      student_grade = StudentGrade.find_by(student_id:, course_id: prerequisite_course.id)
 
       if student_grade.nil? || student_grade.letter_grade == 'F'
         errors.add(:base, "You have not passed the prerequisite course #{prerequisite_course.course_title}.")
       end
     end
   end
-  
+
   def attribute_assignment
-    if !self.section.present? && self.semester_registration.section.present?
-      self[:section_id] = self.semester_registration.section.id
-    end
+    self[:section_id] = semester_registration.section.id if !section.present? && semester_registration.section.present?
   end
 end
