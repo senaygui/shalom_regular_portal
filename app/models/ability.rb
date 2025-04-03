@@ -101,8 +101,8 @@ class Ability
       can :manage, AssessmentPlan, admin_user_id: user.id
       can %i[read update], MakeupExam
       can :read, CourseRegistration, course_id: Course.instructor_courses(user.id)
-      # can :manage, StudentGrade, course_id: Section.instructors(user.id)
-      # can %i[read destroy], StudentGrade, course_id: Course.instructor_courses(user.id)
+      can :manage, StudentGrade, course_id: Section.instructors(user.id)
+      can %i[read destroy], StudentGrade, course_id: Course.instructor_courses(user.id)
       can :read, Notice
       can :read, StudentGrade, course_id: Course.instructor_courses(user.id)
       can :update, StudentGrade, course_id: Course.instructor_courses(user.id)
