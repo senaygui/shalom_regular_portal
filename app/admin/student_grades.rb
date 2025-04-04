@@ -1,6 +1,6 @@
 ActiveAdmin.register StudentGrade do
     menu parent: 'Grade'
-    permit_params :department_approval, :department_head_name, :department_head_date_of_response, :course_registration_id,
+    permit_params :dean_head_name, :dean_approval_status, :department_approval, :department_head_name, :department_head_date_of_response, :course_registration_id,
                   :student_id, :letter_grade, :grade_point, :assesment_total, :grade_point, :course_id, assessments_attributes: %i[id student_grade_id assessment_plan_id student_id course_id result created_by updated_by _destroy]
 
      active_admin_import validate: true,
@@ -34,18 +34,34 @@ ActiveAdmin.register StudentGrade do
       end
       redirect_to collection_path, notice: 'Grade Is Generated Successfully'
     end
-    batch_action 'Approve Grade for', method: :put, confirm: 'Are you sure?' do |ids|
+    batch_action 'Department Head Approve Grade for', method: :put, confirm: 'Are you sure?' do |ids|
       StudentGrade.find(ids).each do |student_grade|
         student_grade.update(department_approval: 'approved', department_head_name: "#{current_admin_user.name.full}",
                              approval_date: Time.now)
       end
       redirect_to collection_path, notice: 'Grade Is Approved Successfully'
     end
-    batch_action 'Denied Grade for', method: :put, if: proc {
-                                                         current_admin_user.role == 'department head'
-                                                       }, confirm: 'Are you sure?' do |ids|
+    batch_action 'Department Head Denied Grade for', method: :put, if: proc {
+                                                                         current_admin_user.role == 'department head'
+                                                                       }, confirm: 'Are you sure?' do |ids|
       StudentGrade.find(ids).each do |student_grade|
         student_grade.update(department_approval: 'denied', department_head_name: "#{current_admin_user.name.full}",
+                             approval_date: Time.now)
+      end
+      redirect_to collection_path, notice: 'Grade Is Denied Successfully'
+    end
+    batch_action 'Dean Approve Grade for', method: :put, confirm: 'Are you sure?' do |ids|
+      StudentGrade.find(ids).each do |student_grade|
+        student_grade.update(dean_head_name: 'approved', dean_approval_status: "#{current_admin_user.name.full}",
+                             approval_date: Time.now)
+      end
+      redirect_to collection_path, notice: 'Grade Is Approved Successfully'
+    end
+    batch_action 'Dean Denied Grade for', method: :put, if: proc {
+                                                              current_admin_user.role == 'department head'
+                                                            }, confirm: 'Are you sure?' do |ids|
+      StudentGrade.find(ids).each do |student_grade|
+        student_grade.update(dean_head_name: 'denied', dean_approval_status: "#{current_admin_user.name.full}",
                              approval_date: Time.now)
       end
       redirect_to collection_path, notice: 'Grade Is Denied Successfully'
