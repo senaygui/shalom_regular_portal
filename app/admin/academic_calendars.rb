@@ -70,7 +70,7 @@ ActiveAdmin.register AcademicCalendar do
       f.input :starting_date, as: :date_time_picker 
       f.input :ending_date, as: :date_time_picker 
       f.input :admission_type, collection: ["online", "regular", "extention", "distance"]
-      f.input :study_level, as: :select, collection: ["undergraduate", "graduate"]
+      f.input :study_level, as: :select, collection: ["undergraduate", "graduate","TVET"]
       f.input :from_year
       f.input :to_year
       f.input :batch
