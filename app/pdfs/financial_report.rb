@@ -19,8 +19,8 @@ class FinancialReport < Prawn::Document
     repeat :all do
       bounding_box [bounds.left, bounds.top], :width => bounds.width do
         font "Helvetica"
-        image open("app/assets/images/logo.png"), fit: [120, 100], position: :center
-        text "HEUC Registrar Portal", :align => :center, :size => 25
+        image open("app/assets/images/logo.jpg"), fit: [120, 100], position: :center
+        text "Shalom College Registrar Portal", :align => :center, :size => 25
         text "Student Payment Report", size: 30, align: :center
         stroke_horizontal_rule
       end
@@ -29,7 +29,7 @@ class FinancialReport < Prawn::Document
         font "Helvetica"
         stroke_horizontal_rule
         move_down(5)
-        text "HEUC Portal", :size => 16, align: :center
+        text "Shalom College Portal", :size => 16, align: :center
         text "+251-9804523154", :size => 16, align: :center
       end
     end

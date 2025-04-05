@@ -4,15 +4,15 @@ set :ssh_options, {
   verify_host_key: :never
 }
 
-role :app, %w{aacp@15.235.65.231}, port: 77
-role :web, %w{aacp@15.235.65.231}, port: 77
-role :db, %w{aacp@15.235.65.231}, port: 77, :primary => true
+role :app, %w{aacp@15.235.65.231}, port: 95
+role :web, %w{aacp@15.235.65.231}, port: 95
+role :db, %w{aacp@15.235.65.231}, port: 95, :primary => true
 
 #set :branch, "main"
 set :branch, "master" 
 set :rails_env, "production"
 
-set :deploy_to, '/home/aacp/heuc_portal' 
+set :deploy_to, '/home/aacp/shalom_regular_portal' 
 
 # You can define all roles on a single server, or split them:
 

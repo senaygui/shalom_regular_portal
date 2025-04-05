@@ -106,14 +106,14 @@
               <div class="col-lg-3 col-md-6">
                 <%= link_to new_student_registration_path(modality: "regular", study_level: "undergraduate"), 'data-no-turbolink' => false do %>
                   <div class="icon-box">
-                    <h4>Regular Degree</h4>
+                    <h4>Bachelor Degree</h4>
                   </div>
                 <% end %>
               </div>
               <div class="col-lg-3 col-md-6">
                 <%= link_to new_student_registration_path(modality: "regular", study_level: "graduate"), 'data-no-turbolink' => false do %>
                   <div class="icon-box">
-                    <h4>Regular Masters</h4>
+                    <h4>Masters Degree</h4>
                   </div>
                 <% end %>
               </div>
@@ -121,6 +121,13 @@
                 <%= link_to new_student_registration_path(modality: "extention", study_level: "undergraduate"), 'data-no-turbolink' => false do %>
                   <div class="icon-box">
                     <h4>Extension Degree</h4>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <%= link_to new_student_registration_path(modality: "TVET", study_level: "undergraduate"), 'data-no-turbolink' => false do %>
+                  <div class="icon-box">
+                    <h4>Diploma TVET</h4>
                   </div>
                 <% end %>
               </div>

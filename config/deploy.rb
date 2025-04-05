@@ -4,12 +4,12 @@ lock "~> 3.17.3"
 
 set :application, "master"
 # set :ssh_options, { :forward_agent => true }
-set :repo_url, "https://github.com/senaygui/hope_portal_system.git"
+set :repo_url, "https://github.com/senaygui/shalom_regular_portal.git"
 
 
 set :git_http_username, 'senaygui' 
-ask(:github_token, "github_token", echo: false) 
-set :git_http_password, fetch((:github_token))
+# ask(:github_token, "github_token", echo: false) 
+# set :git_http_password, fetch((:github_token))
 #set :git_strategy, Capistrano::Git::SubmoduleStrategy
 
 # set :user, "deploy"

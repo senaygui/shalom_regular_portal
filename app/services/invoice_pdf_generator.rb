@@ -23,12 +23,12 @@ class InvoicePdfGenerator
     def header
       @document.image "app/assets/images/logo.jpg", width: 100, position: :center
       @document.move_down 20
-      @document.text "HEUC", size: 28, style: :bold, align: :center
+      @document.text "Shalom College", size: 28, style: :bold, align: :center
       @document.move_down 10
       @document.text "Invoice", size: 16, style: :bold, align: :center
-      @document.text "JEMO, Addis Ababa, Ethiopia", size: 12, align: :center
-      @document.text "Phone: (+251)118325993", size: 12, align: :center
-      @document.text "Email: info@heuc.edu.et", size: 12, align: :center
+      @document.text "Hawassa, Sidama Ethiopia", size: 12, align: :center
+      @document.text "Phone: (+251)90 470 7070", size: 12, align: :center
+      @document.text "Email: info@shalomcollege.edu.et", size: 12, align: :center
       @document.move_down 30
     end
   
