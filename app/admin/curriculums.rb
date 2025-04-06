@@ -190,6 +190,11 @@ filter :updated_at
         a.input :semester, as: :select, collection: [1, 2, 3, 4], include_blank: false
         a.input :course_starting_date, as: :date_time_picker
         a.input :course_ending_date, as: :date_time_picker
+        if a.object.new_record?
+          a.input :created_by, as: :hidden, input_html: { value: current_admin_user.name.full }
+        else
+          a.input :last_updated_by, as: :hidden, input_html: { value: current_admin_user.name.full }
+        end
       end
     end
   

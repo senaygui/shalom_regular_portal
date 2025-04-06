@@ -27,7 +27,7 @@ ActiveAdmin.register Course do
     end
   end
 
-  permit_params(:course_outline, :course_module_id, :major, :curriculum_id, :program_id, :course_title, :batch,
+  permit_params(:course_type,:course_outline, :course_module_id, :major, :curriculum_id, :program_id, :course_title, :batch,
                 :course_code, :course_description, :year, :semester, :course_starting_date, :course_ending_date,
                 :credit_hour, :lecture_hour, :lab_hour, :ects, :created_by,
                 assessment_plans_attributes: %i[id course_id assessment_title
@@ -96,10 +96,11 @@ ActiveAdmin.register Course do
 
     if !(params[:page_name] == 'add_assessment') && !(params[:page_name] == 'course_instructors') && !(current_admin_user.role == 'instructor')
       f.inputs 'Course information' do
-        f.input :major
+        # f.input :major
         f.input :course_title
         f.input :course_code
         f.input :course_description, input_html: { class: 'autogrow', rows: 10, cols: 20 }
+        f.input :course_type, as: :select, collection: ['major', 'elective', 'common', 'supportive']
         f.input :course_module_id, as: :search_select, url: admin_course_modules_path,
                                    fields: %i[module_title id], display_name: 'module_title', minimum_input_length: 2,
                                    order_by: 'id_asc'
